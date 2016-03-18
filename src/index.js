@@ -36,11 +36,11 @@ const extractRefs = (el, $) =>
         [...$(el).find('a')]
           .map(el => {
             const a = $(el);
-            const linkRel = a.attr('href');
-            if (linkRel.startsWith('#'))
-              return $(linkRel).find('a.external').first().attr('href');
+            const linkRef = a.attr('href');
+            if (linkRef.startsWith('#'))
+              return $(linkRef).find('a.external').first().attr('href');
 
-            return linkRel;
+            return linkRef;
           }).filter(x => x != null)
       );
     }, []);
