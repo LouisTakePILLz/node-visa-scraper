@@ -98,7 +98,7 @@ new Crawler({
     });
   },
   onDrain() {
-    const c = new Crawler({
+    new Crawler({
       maxConnections: 50,
       onDrain() {
         const fs = require('fs');
