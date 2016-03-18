@@ -2,7 +2,7 @@
   "presets": ["es2015", "stage-0"],
   "plugins": [
     ["babel-plugin-require-root-rewrite", {
-      "basePath": "src"
+      "overrides": ["lib", "src"]
     }]
   ]
 }
