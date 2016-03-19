@@ -5,6 +5,7 @@ const BASE_ADDRESS = 'https://en.wikipedia.org/';
 const COUNTRY_PATTERN = /.*?Visa_requirements_for_(.*?)_citizens.*?/i;
 const VISA_REQUIRED_PATTERN = /.*?visa\s+required.*?/i;
 const VISA_NOT_REQUIRED_PATTERN = /.*?visa\s+not\s+required.*?/i;
+const COUNTRY_COLUMN_PATTERN = /.*?(?:(?:territor|countr)(?:y|ies)|areas?|europe|africa|america|asia).*?/i;
 
 const visaRequirements = {};
 
@@ -51,7 +52,11 @@ const scrapeVisaRequirements = (key, reqs) => (error, result, $) => {
   tables.each((index, el) => {
     const t = $(el);
 
-    $(t.find('tr').toArray().slice(1)).each((index, el) => {
+    const rows = t.find('tr').toArray();
+    const header = $(rows.shift());
+    if (!COUNTRY_COLUMN_PATTERN.test(header.find('th, td').first().text())) return;
+
+    $(rows).each((index, el) => {
       const tr = $(el);
       if (!tr.children('td').length) return;
 
