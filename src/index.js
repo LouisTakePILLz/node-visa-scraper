@@ -87,7 +87,7 @@ new Crawler({
       const refUrl = $(a).attr('href');
       if (!refUrl) return;
 
-      const result = refUrl.match(/.*?Visa_requirements_for_(.*?)_citizens.*?/i);
+      const result = refUrl.match(COUNTRY_PATTERN);
       if (!result) return;
 
       const country = unescape(result[1].trim());
