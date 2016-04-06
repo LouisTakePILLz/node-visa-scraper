@@ -2,7 +2,7 @@ import Crawler from 'crawler';
 import url from 'url';
 
 const BASE_ADDRESS = 'https://en.wikipedia.org/';
-const COUNTRY_PATTERN = /.*?Visa_requirements_for_(.*?)_citizens.*?/i;
+const COUNTRY_PATTERN = /.*?Visa_requirements_for_(.*?)_citizens(?:_of_(.*)|.*?)/i;
 const VISA_REQUIRED_PATTERN = /.*?visa\s+required.*?/i;
 const VISA_NOT_REQUIRED_PATTERN = /.*?visa\s+not\s+required.*?/i;
 const COUNTRY_COLUMN_PATTERN = /.*?(?:(?:territor|countr)(?:y|ies)|areas?|europe|africa|america|asia).*?/i;
@@ -91,14 +91,17 @@ new Crawler({
       if (!result) return;
 
       const country = unescape(result[1].trim());
+      const region = result[2] && unescape(result[2].trim());
+      const identifier = region ? `${country}_${region}` : country;
 
-      //if (country != 'Saint_Vincent_and_the_Grenadines') return;
-      //if (country != 'British_Overseas_Territories') return;
+      //if (country !== 'Saint_Vincent_and_the_Grenadines') return;
+      //if (country !== 'British_Overseas_Territories') return;
+      //if (country !== 'Chinese') return;
 
-      const reqs = visaRequirements[country] = {};
+      const reqs = visaRequirements[identifier] = {};
       tasks.push({
         uri: refUrl.startsWith('http') ? refUrl : url.resolve(BASE_ADDRESS, refUrl),
-        callback: scrapeVisaRequirements(country, reqs)
+        callback: scrapeVisaRequirements(identifier, reqs)
       });
     });
   },
@@ -116,4 +119,3 @@ new Crawler({
     }).queue([...tasks]);
   }
 }).queue(url.resolve(BASE_ADDRESS, '/wiki/Category:Visa_requirements_by_nationality'));
-
