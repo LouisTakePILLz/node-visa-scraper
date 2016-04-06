@@ -98,6 +98,8 @@ new Crawler({
       //if (country !== 'British_Overseas_Territories') return;
       //if (country !== 'Chinese') return;
 
+      if (visaRequirements[identifier]) return;
+
       const reqs = visaRequirements[identifier] = {};
       tasks.push({
         uri: refUrl.startsWith('http') ? refUrl : url.resolve(BASE_ADDRESS, refUrl),
